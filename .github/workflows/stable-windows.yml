@@ -21,21 +21,19 @@ on:
   repository_dispatch:
     types: [stable]
   push:
-    branches: [ master ]
+    branches: [master]
     paths-ignore:
-    - '**/*.md'
-    - 'upstream/*.json'
+      - "**/*.md"
+      - "upstream/*.json"
   pull_request:
-    branches: [ master ]
+    branches: [master]
     paths-ignore:
-    - '**/*.md'
+      - "**/*.md"
 
 env:
   APP_NAME: VaultCode
   BINARY_NAME: vaultcode
-  APP_NAME: Void
   ASSETS_REPOSITORY: ${{ github.repository_owner }}/binaries
-  BINARY_NAME: void
   GH_REPO_PATH: ${{ github.repository_owner }}/binaries
   ORG_NAME: ${{ github.repository_owner }}
   OS_NAME: windows
@@ -76,7 +74,7 @@ jobs:
       - name: Check existing VSCodium tags/releases
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CHECK_ALL: 'yes'
+          CHECK_ALL: "yes"
         run: ./check_tags.sh
 
   compile:
@@ -88,7 +86,7 @@ jobs:
       MS_TAG: ${{ needs.check.outputs.MS_TAG }}
       RELEASE_VERSION: ${{ needs.check.outputs.RELEASE_VERSION }}
       SHOULD_BUILD: ${{ (needs.check.outputs.SHOULD_BUILD == 'yes' || github.event.inputs.generate_assets == 'true') && 'yes' || 'no' }}
-      VSCODE_ARCH: 'x64'
+      VSCODE_ARCH: "x64"
     outputs:
       BUILD_SOURCEVERSION: ${{ env.BUILD_SOURCEVERSION }}
 
@@ -112,13 +110,13 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20.18.2'
+          node-version: "20.18.2"
         if: env.SHOULD_BUILD == 'yes'
 
       - name: Setup Python 3
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
         if: env.SHOULD_BUILD == 'yes'
 
       - name: Install libkrb5-dev
@@ -134,8 +132,8 @@ jobs:
 
       - name: Build
         env:
-          SHOULD_BUILD_REH: 'no'
-          SHOULD_BUILD_REH_WEB: 'no'
+          SHOULD_BUILD_REH: "no"
+          SHOULD_BUILD_REH_WEB: "no"
         run: ./build.sh
         if: env.SHOULD_BUILD == 'yes'
 
@@ -198,13 +196,13 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20.18.2'
+          node-version: "20.18.2"
         if: env.SHOULD_BUILD == 'yes'
 
       - name: Setup Python 3
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
         if: env.SHOULD_BUILD == 'yes'
 
       - name: Check existing VSCodium tags/releases
@@ -296,22 +294,22 @@ jobs:
   #     APP_IDENTIFIER: VSCodium.VSCodium
   #   if: needs.build.outputs.SHOULD_DEPLOY == 'yes'
 
-    # steps:
-    #   - uses: actions/checkout@v4
-    #     with:
-    #       ref: ${{ env.GITHUB_BRANCH }}
+  # steps:
+  #   - uses: actions/checkout@v4
+  #     with:
+  #       ref: ${{ env.GITHUB_BRANCH }}
 
-      # - name: Check version
-      #   run: ./stores/winget/check_version.sh
-      #   env:
-      #     RELEASE_VERSION: ${{ needs.build.outputs.RELEASE_VERSION }}
+  # - name: Check version
+  #   run: ./stores/winget/check_version.sh
+  #   env:
+  #     RELEASE_VERSION: ${{ needs.build.outputs.RELEASE_VERSION }}
 
-      # - name: Release to WinGet
-      #   uses: vedantmgoyal9/winget-releaser@main
-      #   with:
-      #     identifier: ${{ env.APP_IDENTIFIER }}
-      #     version: ${{ env.RELEASE_VERSION }}
-      #     release-tag: ${{ env.RELEASE_VERSION }}
-      #     installers-regex: '\.exe$' # only .exe files
-      #     token: ${{ secrets.STRONGER_GITHUB_TOKEN }}
-      #   if: env.SHOULD_DEPLOY == 'yes'
+  # - name: Release to WinGet
+  #   uses: vedantmgoyal9/winget-releaser@main
+  #   with:
+  #     identifier: ${{ env.APP_IDENTIFIER }}
+  #     version: ${{ env.RELEASE_VERSION }}
+  #     release-tag: ${{ env.RELEASE_VERSION }}
+  #     installers-regex: '\.exe$' # only .exe files
+  #     token: ${{ secrets.STRONGER_GITHUB_TOKEN }}
+  #   if: env.SHOULD_DEPLOY == 'yes'

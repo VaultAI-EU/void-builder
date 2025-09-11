@@ -21,25 +21,23 @@ on:
   repository_dispatch:
     types: [stable]
   push:
-    branches: [ master ]
+    branches: [master]
     paths-ignore:
-    - '**/*.md'
-    - 'upstream/*.json'
+      - "**/*.md"
+      - "upstream/*.json"
   pull_request:
-    branches: [ master ]
+    branches: [master]
     paths-ignore:
-    - '**/*.md'
+      - "**/*.md"
 
 env:
   APP_NAME: VaultCode
   BINARY_NAME: vaultcode
-  APP_NAME: Void
   # ASSETS_REPOSITORY is where all the downloads are.
   # VSCodium has this be the current repo, voideditor/void-builder:
   # ASSETS_REPOSITORY: ${{ github.repository }}
 
   ASSETS_REPOSITORY: ${{ github.repository_owner }}/binaries
-  BINARY_NAME: void
   GH_REPO_PATH: ${{ github.repository_owner }}/binaries
   ORG_NAME: ${{ github.repository_owner }}
   OS_NAME: osx
@@ -73,12 +71,12 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20.18.2'
+          node-version: "20.18.2"
 
       - name: Setup Python 3
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
         if: env.VSCODE_ARCH == 'x64'
 
       - name: Clone VSCode repo
