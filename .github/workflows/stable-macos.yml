@@ -31,6 +31,8 @@ on:
     - '**/*.md'
 
 env:
+  APP_NAME: VaultCode
+  BINARY_NAME: vaultcode
   APP_NAME: Void
   # ASSETS_REPOSITORY is where all the downloads are.
   # VSCodium has this be the current repo, voideditor/void-builder:

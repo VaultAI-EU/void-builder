@@ -31,6 +31,8 @@ on:
     - '**/*.md'
 
 env:
+  APP_NAME: VaultCode
+  BINARY_NAME: vaultcode
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
   APP_NAME: Void
   ASSETS_REPOSITORY: ${{ github.repository_owner }}/binaries
