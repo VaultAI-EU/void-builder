@@ -38,30 +38,40 @@ if [[ "${OS_NAME}" == "osx" ]]; then
 
     CODESIGN_IDENTITY="$( security find-identity -v -p codesigning "${KEYCHAIN}" | grep -oEi "([0-9A-F]{40})" | head -n 1 )"
 
-    echo "+ signing"
-    export CODESIGN_IDENTITY AGENT_TEMPDIRECTORY
+    if [[ -n "${CODESIGN_IDENTITY}" ]]; then
+      echo "+ signing"
+      export CODESIGN_IDENTITY AGENT_TEMPDIRECTORY
 
-    DEBUG="electron-osx-sign*" node vscode/build/darwin/sign.js "$( pwd )"
+      DEBUG="electron-osx-sign*" node vscode/build/darwin/sign.js "$( pwd )"
+    else
+      echo "Warning: No code signing identity found, skipping signing"
+    fi
     # codesign --display --entitlements :- ""
 
-    echo "+ notarize"
+    if [[ -n "${CODESIGN_IDENTITY}" && -n "${CERTIFICATE_OSX_ID}" ]]; then
+      echo "+ notarize"
 
-    cd "VSCode-darwin-${VSCODE_ARCH}"
-    ZIP_FILE="./${APP_NAME}-darwin-${VSCODE_ARCH}-${RELEASE_VERSION}.zip"
+      cd "VSCode-darwin-${VSCODE_ARCH}"
+      ZIP_FILE="./${APP_NAME}-darwin-${VSCODE_ARCH}-${RELEASE_VERSION}.zip"
 
-    zip -r -X -y "${ZIP_FILE}" ./*.app
+      zip -r -X -y "${ZIP_FILE}" ./*.app
 
-    xcrun notarytool store-credentials "${APP_NAME}" --apple-id "${CERTIFICATE_OSX_ID}" --team-id "${CERTIFICATE_OSX_TEAM_ID}" --password "${CERTIFICATE_OSX_APP_PASSWORD}" --keychain "${KEYCHAIN}"
-    # xcrun notarytool history --keychain-profile "${APP_NAME}" --keychain "${KEYCHAIN}"
-    xcrun notarytool submit "${ZIP_FILE}" --keychain-profile "${APP_NAME}" --wait --keychain "${KEYCHAIN}"
+      xcrun notarytool store-credentials "${APP_NAME}" --apple-id "${CERTIFICATE_OSX_ID}" --team-id "${CERTIFICATE_OSX_TEAM_ID}" --password "${CERTIFICATE_OSX_APP_PASSWORD}" --keychain "${KEYCHAIN}"
+      # xcrun notarytool history --keychain-profile "${APP_NAME}" --keychain "${KEYCHAIN}"
+      xcrun notarytool submit "${ZIP_FILE}" --keychain-profile "${APP_NAME}" --wait --keychain "${KEYCHAIN}"
 
-    echo "+ attach staple"
-    xcrun stapler staple ./*.app
-    # spctl --assess -vv --type install ./*.app
+      echo "+ attach staple"
+      xcrun stapler staple ./*.app
+      # spctl --assess -vv --type install ./*.app
 
-    rm "${ZIP_FILE}"
+      rm "${ZIP_FILE}"
 
-    cd ..
+      cd ..
+    else
+      echo "Warning: Skipping notarization (no signing identity or Apple ID)"
+      cd "VSCode-darwin-${VSCODE_ARCH}"
+      cd ..
+    fi
   fi
 
   if [[ "${SHOULD_BUILD_ZIP}" != "no" ]]; then
