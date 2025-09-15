@@ -68,11 +68,12 @@ for FILE in *; do
       echo "exit: ${EXIT_STATUS}"
 
       if (( "${EXIT_STATUS}" )); then
-        echo "'${FILE}' hasn't been uploaded!"
+        echo "Warning: '${FILE}' hasn't been uploaded after retries!"
+        echo "Continuing with other files..."
 
         github-release delete --owner "${REPOSITORY_OWNER}" --repo "${REPOSITORY_NAME}" --tag "${RELEASE_VERSION}" "${FILE}" "${FILE}.sha1" "${FILE}.sha256"
 
-        exit 1
+        # Don't exit, continue with other files
       fi
     fi
 
