@@ -12,7 +12,12 @@ elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
 	echo "It's a Push"
 
 	export SHOULD_BUILD="yes"
-	export SHOULD_DEPLOY="yes"
+	# Only deploy on push to main branch
+	if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+		export SHOULD_DEPLOY="yes"
+	else
+		export SHOULD_DEPLOY="no"
+	fi
 elif [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
   if [[ "${GENERATE_ASSETS}" == "true" ]]; then
     echo "It will generate the assets"

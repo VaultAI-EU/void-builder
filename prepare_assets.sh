@@ -123,12 +123,20 @@ elif [[ "${OS_NAME}" == "windows" ]]; then
 
   if [[ "${SHOULD_BUILD_EXE_SYS}" != "no" ]]; then
     echo "Moving System EXE"
-    mv vscode/.build/win32-${VSCODE_ARCH}/system-setup/VSCodeSetup*.exe "assets/${APP_NAME}Setup-${VSCODE_ARCH}-${RELEASE_VERSION}.exe"
+    if ls vscode/.build/win32-${VSCODE_ARCH}/system-setup/*Setup*.exe 1> /dev/null 2>&1; then
+      mv vscode/.build/win32-${VSCODE_ARCH}/system-setup/*Setup*.exe "assets/${APP_NAME}Setup-${VSCODE_ARCH}-${RELEASE_VERSION}.exe"
+    else
+      echo "Warning: No system setup exe found in vscode/.build/win32-${VSCODE_ARCH}/system-setup/"
+    fi
   fi
 
   if [[ "${SHOULD_BUILD_EXE_USR}" != "no" ]]; then
     echo "Moving User EXE"
-    mv vscode/.build/win32-${VSCODE_ARCH}/user-setup/VSCodeUserSetup*.exe "assets/${APP_NAME}UserSetup-${VSCODE_ARCH}-${RELEASE_VERSION}.exe"
+    if ls vscode/.build/win32-${VSCODE_ARCH}/user-setup/*Setup*.exe 1> /dev/null 2>&1; then
+      mv vscode/.build/win32-${VSCODE_ARCH}/user-setup/*Setup*.exe "assets/${APP_NAME}UserSetup-${VSCODE_ARCH}-${RELEASE_VERSION}.exe"
+    else
+      echo "Warning: No user setup exe found in vscode/.build/win32-${VSCODE_ARCH}/user-setup/"
+    fi
   fi
 
   if [[ "${VSCODE_ARCH}" == "ia32" || "${VSCODE_ARCH}" == "x64" ]]; then
