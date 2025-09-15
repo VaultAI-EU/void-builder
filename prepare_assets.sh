@@ -142,12 +142,20 @@ elif [[ "${OS_NAME}" == "windows" ]]; then
   if [[ "${VSCODE_ARCH}" == "ia32" || "${VSCODE_ARCH}" == "x64" ]]; then
     if [[ "${SHOULD_BUILD_MSI}" != "no" ]]; then
       echo "Moving MSI"
-      mv "build\\windows\\msi\\releasedir\\${APP_NAME}-${VSCODE_ARCH}-${RELEASE_VERSION}.msi" assets/
+      if ls build/windows/msi/releasedir/${APP_NAME}-${VSCODE_ARCH}-${RELEASE_VERSION}.msi 1> /dev/null 2>&1; then
+        mv build/windows/msi/releasedir/${APP_NAME}-${VSCODE_ARCH}-${RELEASE_VERSION}.msi assets/
+      else
+        echo "Warning: No MSI found in build/windows/msi/releasedir/"
+      fi
     fi
 
     if [[ "${SHOULD_BUILD_MSI_NOUP}" != "no" ]]; then
       echo "Moving MSI with disabled updates"
-      mv "build\\windows\\msi\\releasedir\\${APP_NAME}-${VSCODE_ARCH}-updates-disabled-${RELEASE_VERSION}.msi" assets/
+      if ls build/windows/msi/releasedir/${APP_NAME}-${VSCODE_ARCH}-updates-disabled-${RELEASE_VERSION}.msi 1> /dev/null 2>&1; then
+        mv build/windows/msi/releasedir/${APP_NAME}-${VSCODE_ARCH}-updates-disabled-${RELEASE_VERSION}.msi assets/
+      else
+        echo "Warning: No MSI with disabled updates found in build/windows/msi/releasedir/"
+      fi
     fi
   fi
 
