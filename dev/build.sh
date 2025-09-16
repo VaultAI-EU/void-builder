@@ -5,7 +5,7 @@
 # to run with Bash: "C:\Program Files\Git\bin\bash.exe" ./dev/build.sh
 ###
 
-export APP_NAME="Void"
+export APP_NAME="Vault Code"
 export BINARY_NAME="codium"
 export CI_BUILD="no"
 export GH_REPO_PATH="VaultAI-EU/void"

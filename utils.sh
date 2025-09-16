@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-APP_NAME="${APP_NAME:-Void}"
+APP_NAME="${APP_NAME:-Vault Code}"
 APP_NAME_LC="$( echo "${APP_NAME}" | awk '{print tolower($0)}' )"
-BINARY_NAME="${BINARY_NAME:-void}"
+BINARY_NAME="${BINARY_NAME:-vaultcode}"
 GH_REPO_PATH="${GH_REPO_PATH:-VaultAI-EU/void}"
 ORG_NAME="${ORG_NAME:-VaultAI-EU}"
 
