@@ -267,9 +267,14 @@ if [[ "${OS_NAME}" == "linux" ]]; then
   # snapcraft.yaml
   sed -i 's|Visual Studio Code|Vault Code|'  resources/linux/rpm/code.spec.template
 elif [[ "${OS_NAME}" == "windows" ]]; then
-  # code.iss
+  # code.iss - Fix Inno Setup branding for EXE installers
   sed -i 's|https://code.visualstudio.com|https://VaultAI-EU.com|' build/win32/code.iss
   sed -i 's|Microsoft Corporation|Vault Code|' build/win32/code.iss
+  sed -i 's|AppName=Visual Studio Code|AppName=Vault Code|' build/win32/code.iss
+  sed -i 's|AppVerName=Visual Studio Code|AppVerName=Vault Code|' build/win32/code.iss
+  sed -i 's|DefaultDirName={autopf}\\Microsoft VS Code|DefaultDirName={autopf}\\Vault Code|' build/win32/code.iss
+  sed -i 's|DefaultGroupName=Visual Studio Code|DefaultGroupName=Vault Code|' build/win32/code.iss
+  sed -i 's|Visual Studio Code|Vault Code|g' build/win32/code.iss
 fi
 
 cd ..
